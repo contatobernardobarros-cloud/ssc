@@ -67,13 +67,16 @@ app.use((req, res, next) => {
   contador++;
   console.log(contador);
 
+  /*
   if (contador >= 500) {
     console.log("Treshold atingido");
     process.exit();
-  }
+  }*/
 
   next(); // Continua o fluxo
-});
+}); 
+
+
 // Serve arquivos estáticos da pasta "public"
 app.use(express.static(path.join(__dirname, "public")));
 
