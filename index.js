@@ -38,11 +38,12 @@ app.get("/", function (req, res){
   res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
+/*
 app.get("/log", function (req, res){
   res.sendFile(path.join(__dirname, "public", "registros.json"));
-});
+});*/
 
-app.post("/passwordchange", (req, res) => {
+app.post("/submit", (req, res) => {
   const { dado, origem, dataHora, navegador } = req.body;
 
   let registros = [];
