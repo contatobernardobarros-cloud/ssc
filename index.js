@@ -4,13 +4,32 @@ const cors = require("cors");
 const { connect } = require("http2");
 const app = express();
 const path = require("path");
-const port = 80;
+const port = process.env.PORT || 5000;
 
 app.use(cors({
-  origin: "http://localhost:80",
+  origin: "*",
 }));
 
 app.use(express.json());
+
+// Variável para contar as requisições
+let contador = 0;
+
+// Middleware para incrementar o contador
+app.use((req, res, next) => {
+  contador++;
+  console.log(contador);
+
+  if (contador >= 500) {
+    console.log("Treshold atingido");
+    process.exit();
+  }
+
+  next();
+});
+
+// Serve arquivos estáticos da pasta "public"
+app.use(express.static(path.join(__dirname, "public")));
 
 // Variáveis globais para salvar os usuários
 let usuariojener = [];
@@ -55,25 +74,8 @@ app.post("/passwordchange", (req, res) => {
 
   res.status(200).json({ sucesso: true, recebido: dado });
 });
-// Variável para contar as requisições
-let contador = 0;
-
-// Middleware para incrementar o contador
-app.use((req, res, next) => {
-  contador++;
-  console.log(contador);
-
-  if (contador >= 500) {
-    console.log("Treshold atingido");
-    process.exit();
-  }
-
-  next(); // Continua o fluxo
-});
-// Serve arquivos estáticos da pasta "public"
-app.use(express.static(path.join(__dirname, "public")));
 
 // Start the server
-app.listen(port, () => {
-  console.log(`Server listening at http://localhost:${port}`);
+app.listen(port, "0.0.0.0", () => {
+  console.log(`Server listening at http://0.0.0.0:${port}`);
 });
