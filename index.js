@@ -14,10 +14,11 @@ app.use(cors({
 
 app.use(express.json());
 
-app.use((req, res, next) => {
-  res.setHeader("Content-Security-Policy", "default-src * 'unsafe-inline' 'unsafe-eval' data: blob:;");
-  next();
-});
+res.setHeader(
+  "Content-Security-Policy",
+  "default-src 'self'; connect-src 'self' https://ssc-prodemge-gov-br.onrender.com; script-src 'self'"
+);
+
 
 
 // Variáveis globais para salvar os usuários
